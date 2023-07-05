@@ -1,8 +1,8 @@
-
-from sklearn.externals import joblib
+import joblib
 from request import Request
 import urllib.parse
 import json
+
 
 class ThreatClassifier(object):
 	def __init__(self):
