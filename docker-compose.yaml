@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  waf_db:
+    image: "mongo"
+  
+  waf:
+    build: .
+    depends_on:
+      - waf_db
+    ports:
+      - "5007:5007"
+      
