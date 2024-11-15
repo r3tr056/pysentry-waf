@@ -6,8 +6,8 @@ import json
 
 class ThreatClassifier(object):
 	def __init__(self):
-		self.clf = joblib.load("../classifier/predictor.joblib")
-		self.pt_clf = joblib.load("../classifier/pt_predictor.joblib")
+		self.clf = joblib.load("./threat_engine/predictor.joblib")
+		self.pt_clf = joblib.load("./threat_engine/pt_predictor.joblib")
 
 	def __unquote(self, text):
 		k = 0
@@ -33,9 +33,13 @@ class ThreatClassifier(object):
 		pattern = pattern.lower()
 		pattern = self.__remove_multiple_whitespace(pattern)
 
+	def __is_valid(self, paramater):
+		return paramater != None and paramater != ''
+
 	def classify_request(self, req):
 		if not isinstance(req, Request):
 			raise TypeError("Object should be a Request!!!")
+		
 		paramaters = []
 		locations = []
 
