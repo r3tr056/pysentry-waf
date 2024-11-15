@@ -6,30 +6,8 @@ import json
 import os
 import pandas as pd
 
-class Request(object):
-    def __init__(self, id=None, timestamp=None, origin=None, host=None, request=None, body=None, method=None, headers=None, threats=None):
-        self.id = id
-        self.timestamp = timestamp
-        self.origin = origin
-        self.host = host
-        self.request = request
-        self.body = body
-        self.method = method
-        self.headers = headers
-        self.threats = threats
+from waf.schema import WAFRequest
 
-
-    def to_json(self):
-        output = {}
-        if self.request != None and self.request != '':
-            output['request'] = self.request
-        if self.body != None and self.body != '':
-            output['body'] = self.body
-        if self.headers != None:
-            for header, value in self.headers.items():
-                output[header] = value
-
-        return json.dumps(output)
 
 class DBController(object):
     def __init__(self) -> None:
@@ -37,8 +15,8 @@ class DBController(object):
         self.conn.row_factory = sqlite3.Row
 
     def save(self, obj):
-        if not isinstance(obj, Request):
-             raise TypeError("Object should be a Request!!!")
+        if not isinstance(obj, WAFRequest):
+            raise TypeError("Object should be a WAFRequest!!!")
 
         cursor = self.conn.cursor()
         obj.timestamp = datetime.datetime.now()
@@ -90,9 +68,3 @@ class DBController(object):
 
     def close(self):
         self.conn.close()
-            
-
-
-
-    
-
