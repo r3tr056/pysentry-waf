@@ -49,6 +49,21 @@ class Config:
     THREAT_MODEL_PATH: str = os.getenv('THREAT_MODEL_PATH', './waf/threat_engine/predictor.joblib')
     PT_MODEL_PATH: str = os.getenv('PT_MODEL_PATH', './waf/threat_engine/pt_predictor.joblib')
     
+    @property
+    def mongodb_url(self) -> str:
+        """Get MongoDB URL"""
+        return self.MONGODB_URL
+    
+    @property
+    def redis_url(self) -> Optional[str]:
+        """Get Redis URL"""
+        return self.REDIS_URL
+    
+    @property
+    def secret_key(self) -> str:
+        """Get secret key"""
+        return self.SECRET_KEY
+    
     @classmethod
     def validate(cls) -> None:
         """Validate critical configuration for production"""
