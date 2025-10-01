@@ -14,7 +14,7 @@ from sklearn.naive_bayes import MultinomialNB
 # Add phase1_implementation to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from config.classifier_fixed import ThreatClassifier
+from src.pysentry.core.classifier import ThreatClassifier
 
 
 @pytest.fixture

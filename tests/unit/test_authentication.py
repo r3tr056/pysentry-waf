@@ -11,7 +11,7 @@ from pathlib import Path
 # Add phase1_implementation to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.pysentry.core.authentication import AuthManager, APIKeyManager
+from src.pysentry.core.auth import AuthManager, APIKeyManager
 from fastapi import HTTPException
 
 

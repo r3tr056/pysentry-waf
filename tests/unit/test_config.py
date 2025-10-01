@@ -82,12 +82,14 @@ class TestEnvironmentFile:
     
     def test_env_example_exists(self):
         """Test .env.example file exists"""
-        env_file = Path(__file__).parent.parent / 'config' / '.env.example'
+        # Look in repository root config directory
+        env_file = Path(__file__).parent.parent.parent / 'config' / '.env.example'
         assert env_file.exists()
     
     def test_env_example_has_required_vars(self):
         """Test .env.example contains required variables"""
-        env_file = Path(__file__).parent.parent / 'config' / '.env.example'
+        # Look in repository root config directory
+        env_file = Path(__file__).parent.parent.parent / 'config' / '.env.example'
         content = env_file.read_text()
         
         required_vars = [
