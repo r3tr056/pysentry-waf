@@ -2,7 +2,7 @@
 Phase 1.4: JWT Authentication System
 Production-grade authentication with role-based access control
 """
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -87,13 +87,13 @@ class AuthManager:
         to_encode = data.copy()
         
         if expires_delta:
-            expire = datetime.utcnow() + expires_delta
+            expire = datetime.now(timezone.utc) + expires_delta
         else:
-            expire = datetime.utcnow() + timedelta(hours=self.expiration_hours)
+            expire = datetime.now(timezone.utc) + timedelta(hours=self.expiration_hours)
         
         to_encode.update({
             "exp": expire,
-            "iat": datetime.utcnow(),
+            "iat": datetime.now(timezone.utc),
             "type": "access"
         })
         
@@ -231,12 +231,12 @@ class APIKeyManager:
         Returns:
             API key string
         """
-        expire = datetime.utcnow() + timedelta(days=expires_days)
+        expire = datetime.now(timezone.utc) + timedelta(days=expires_days)
         
         payload = {
             "service": service_name,
             "exp": expire,
-            "iat": datetime.utcnow(),
+            "iat": datetime.now(timezone.utc),
             "type": "api_key"
         }
         

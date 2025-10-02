@@ -1,7 +1,7 @@
 """Tests for health check system."""
 
 import pytest
-from datetime import datetime
+from datetime import datetime, timezone
 from pysentry.monitoring.health import (
     HealthStatus,
     ComponentHealth,
@@ -30,7 +30,7 @@ class TestComponentHealth:
             name="database",
             status=HealthStatus.HEALTHY,
             message="Connection OK",
-            last_check=datetime.utcnow()
+            last_check=datetime.now(timezone.utc)
         )
         
         assert health.name == "database"
@@ -42,7 +42,7 @@ class TestComponentHealth:
         health = ComponentHealth(
             name="redis",
             status=HealthStatus.HEALTHY,
-            last_check=datetime.utcnow(),
+            last_check=datetime.now(timezone.utc),
             response_time_ms=15.5,
             details={"connections": 10}
         )
@@ -60,13 +60,13 @@ class TestHealthCheckResult:
             ComponentHealth(
                 name="test",
                 status=HealthStatus.HEALTHY,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
         ]
         
         result = HealthCheckResult(
             status=HealthStatus.HEALTHY,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             components=components,
             overall_response_time_ms=25.0
         )
@@ -89,7 +89,7 @@ class TestHealthCheck:
             return ComponentHealth(
                 name="test",
                 status=HealthStatus.HEALTHY,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         self.health_check.register_check("test", mock_check)
@@ -103,7 +103,7 @@ class TestHealthCheck:
                 name="test",
                 status=HealthStatus.HEALTHY,
                 message="OK",
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         self.health_check.register_check("test", mock_check)
@@ -140,7 +140,7 @@ class TestHealthCheck:
             return ComponentHealth(
                 name="test",
                 status=HealthStatus.HEALTHY,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         self.health_check.register_check("component1", healthy_check)
@@ -158,14 +158,14 @@ class TestHealthCheck:
             return ComponentHealth(
                 name="healthy",
                 status=HealthStatus.HEALTHY,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         async def degraded_check():
             return ComponentHealth(
                 name="degraded",
                 status=HealthStatus.DEGRADED,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         self.health_check.register_check("component1", healthy_check)
@@ -182,14 +182,14 @@ class TestHealthCheck:
             return ComponentHealth(
                 name="healthy",
                 status=HealthStatus.HEALTHY,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         async def unhealthy_check():
             return ComponentHealth(
                 name="unhealthy",
                 status=HealthStatus.UNHEALTHY,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         self.health_check.register_check("component1", healthy_check)
@@ -212,7 +212,7 @@ class TestHealthCheck:
             return ComponentHealth(
                 name="test",
                 status=HealthStatus.HEALTHY,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         self.health_check.register_check("test", healthy_check)
@@ -226,7 +226,7 @@ class TestHealthCheck:
             return ComponentHealth(
                 name="test",
                 status=HealthStatus.UNHEALTHY,
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
         self.health_check.register_check("test", unhealthy_check)

@@ -33,12 +33,8 @@ class TestConfiguration:
         monkeypatch.setenv('DEBUG', 'true')
         monkeypatch.setenv('RATE_LIMIT_REQUESTS', '200')
         
-        # Reload config
-        from importlib import reload
-        from src.pysentry.core import config as config_module
-        reload(config_module)
-        
-        config = config_module.Config()
+        # Create new config instance after env vars are set
+        config = Config()
         assert config.ENVIRONMENT == 'production'
         assert config.DEBUG is True
         assert config.RATE_LIMIT_REQUESTS == 200
@@ -48,19 +44,18 @@ class TestConfiguration:
         monkeypatch.setenv('ENVIRONMENT', 'production')
         monkeypatch.setenv('SECRET_KEY', 'short')
         
-        from importlib import reload
-        from src.pysentry.core import config as config_module
-        reload(config_module)
-        
-        config = config_module.Config()
+        # Create new config instance after env vars are set
+        config = Config()
         
         with pytest.raises(ValueError, match="SECRET_KEY must be set"):
             config.validate()
     
-    def test_model_path_validation(self):
+    def test_model_path_validation(self, monkeypatch):
         """Test ML model path validation"""
+        # Set a non-default path that doesn't exist
+        monkeypatch.setenv('THREAT_MODEL_PATH', '/nonexistent/path.joblib')
+        
         config = Config()
-        config.THREAT_MODEL_PATH = "/nonexistent/path.joblib"
         
         with pytest.raises(ValueError, match="Threat model not found"):
             config.validate()

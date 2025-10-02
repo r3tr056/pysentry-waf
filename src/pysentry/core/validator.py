@@ -163,7 +163,7 @@ class InputValidator:
         """
         if content_length and content_length > self.max_request_size:
             raise HTTPException(
-                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                status_code=status.HTTP_413_CONTENT_TOO_LARGE,
                 detail=f"Request size exceeds maximum allowed ({self.max_request_size} bytes)"
             )
     

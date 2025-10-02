@@ -5,7 +5,7 @@ Health check system for PySentry WAF.
 import asyncio
 from enum import Enum
 from typing import Dict, List, Optional, Callable, Awaitable
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import BaseModel
 
 
@@ -80,24 +80,24 @@ class HealthCheck:
                 name=name,
                 status=HealthStatus.UNHEALTHY,
                 message=f"Component '{name}' not registered",
-                last_check=datetime.utcnow()
+                last_check=datetime.now(timezone.utc)
             )
             
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         try:
             result = await self._checks[name]()
-            response_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+            response_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             result.response_time_ms = response_time
-            result.last_check = datetime.utcnow()
+            result.last_check = datetime.now(timezone.utc)
             return result
         except Exception as e:
-            response_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+            response_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             return ComponentHealth(
                 name=name,
                 status=HealthStatus.UNHEALTHY,
                 message=f"Health check failed: {str(e)}",
-                last_check=datetime.utcnow(),
+                last_check=datetime.now(timezone.utc),
                 response_time_ms=response_time
             )
             
@@ -108,7 +108,7 @@ class HealthCheck:
         Returns:
             HealthCheckResult with all component statuses
         """
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         # Run all checks concurrently
         check_tasks = [
@@ -126,11 +126,11 @@ class HealthCheck:
         else:
             overall_status = HealthStatus.DEGRADED
             
-        response_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+        response_time = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
         
         return HealthCheckResult(
             status=overall_status,
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(timezone.utc),
             components=list(components),
             overall_response_time_ms=response_time
         )
@@ -177,14 +177,14 @@ async def check_database_health(db_service) -> ComponentHealth:
             name="database",
             status=HealthStatus.HEALTHY,
             message="Database connection OK",
-            last_check=datetime.utcnow()
+            last_check=datetime.now(timezone.utc)
         )
     except Exception as e:
         return ComponentHealth(
             name="database",
             status=HealthStatus.UNHEALTHY,
             message=f"Database connection failed: {str(e)}",
-            last_check=datetime.utcnow()
+            last_check=datetime.now(timezone.utc)
         )
 
 
@@ -196,14 +196,14 @@ async def check_redis_health(redis_client) -> ComponentHealth:
             name="redis",
             status=HealthStatus.HEALTHY,
             message="Redis connection OK",
-            last_check=datetime.utcnow()
+            last_check=datetime.now(timezone.utc)
         )
     except Exception as e:
         return ComponentHealth(
             name="redis",
             status=HealthStatus.UNHEALTHY,
             message=f"Redis connection failed: {str(e)}",
-            last_check=datetime.utcnow()
+            last_check=datetime.now(timezone.utc)
         )
 
 
@@ -217,12 +217,12 @@ async def check_ml_model_health(classifier) -> ComponentHealth:
             name="ml_model",
             status=HealthStatus.HEALTHY,
             message="ML model operational",
-            last_check=datetime.utcnow()
+            last_check=datetime.now(timezone.utc)
         )
     except Exception as e:
         return ComponentHealth(
             name="ml_model",
             status=HealthStatus.UNHEALTHY,
             message=f"ML model check failed: {str(e)}",
-            last_check=datetime.utcnow()
+            last_check=datetime.now(timezone.utc)
         )

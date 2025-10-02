@@ -5,7 +5,7 @@ Structured logging system for PySentry WAF.
 import logging
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 from pythonjsonlogger import jsonlogger
 
@@ -43,7 +43,7 @@ class StructuredLogger:
         """Add contextual information to log entry."""
         context = {
             "service": "pysentry-waf",
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
         if extra:
             context.update(extra)
