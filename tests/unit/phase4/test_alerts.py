@@ -1,7 +1,7 @@
 """Tests for alerting system."""
 
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pysentry.monitoring.alerts import (
     AlertSeverity,
     AlertRule,
@@ -51,7 +51,7 @@ class TestAlert:
             rule_name="test_rule",
             severity=AlertSeverity.CRITICAL,
             message="Test alert fired",
-            triggered_at=datetime.utcnow(),
+            triggered_at=datetime.now(timezone.utc),
             value=150.0,
             threshold=100.0
         )
