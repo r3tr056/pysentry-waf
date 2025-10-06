@@ -2,7 +2,7 @@
 IP Address data models
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 from pydantic import BaseModel, Field, field_validator
 import ipaddress
@@ -32,7 +32,7 @@ class BlockedIP(IPAddress):
 
     id: Optional[str] = Field(default=None, description="Unique identifier")
     reason: str = Field(default="Malicious activity detected", description="Block reason")
-    blocked_at: datetime = Field(default_factory=datetime.utcnow)
+    blocked_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     expires_at: Optional[datetime] = Field(
         default=None, description="When the block expires (None for permanent)"
     )

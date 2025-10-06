@@ -4,7 +4,7 @@ Alerting system for PySentry WAF.
 
 from enum import Enum
 from typing import Dict, List, Optional, Callable
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel
 from collections import defaultdict
 
@@ -99,7 +99,7 @@ class AlertManager:
         elif rule.comparison == "eq":
             triggered = current_value == rule.threshold
             
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         
         # Check if condition has persisted for required duration
         state = self._rule_states[rule.name]
@@ -177,7 +177,7 @@ class AlertManager:
         """
         if rule_name in self._active_alerts:
             alert = self._active_alerts.pop(rule_name)
-            alert.resolved_at = datetime.utcnow()
+            alert.resolved_at = datetime.now(timezone.utc)
             
     def get_active_alerts(self, severity: Optional[AlertSeverity] = None) -> List[Alert]:
         """

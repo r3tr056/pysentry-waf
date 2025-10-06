@@ -3,7 +3,7 @@ MongoDB database service implementation
 """
 
 from typing import List, Optional, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 import logging
@@ -54,8 +54,8 @@ class MongoDBService(DatabaseService):
     # Threat operations
     async def create_threat(self, threat_data: Dict[str, Any]) -> str:
         """Create a new threat entry"""
-        threat_data["created_at"] = datetime.utcnow()
-        threat_data["updated_at"] = datetime.utcnow()
+        threat_data["created_at"] = datetime.now(timezone.utc)
+        threat_data["updated_at"] = datetime.now(timezone.utc)
         result = await self.db.threats.insert_one(threat_data)
         return str(result.inserted_id)
 
@@ -106,7 +106,7 @@ class MongoDBService(DatabaseService):
     # IP blocking operations
     async def block_ip(self, ip_data: Dict[str, Any]) -> str:
         """Block an IP address"""
-        ip_data["blocked_at"] = datetime.utcnow()
+        ip_data["blocked_at"] = datetime.now(timezone.utc)
         result = await self.db.blocked_ips.insert_one(ip_data)
         return str(result.inserted_id)
 

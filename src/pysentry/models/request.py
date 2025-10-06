@@ -2,7 +2,7 @@
 Request data models
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, List, Any
 from pydantic import BaseModel, Field
 
@@ -11,7 +11,7 @@ class WAFRequest(BaseModel):
     """WAF Request model for analyzing incoming requests"""
 
     id: Optional[str] = None
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     origin: str = Field(..., description="Source IP address")
     host: str = Field(..., description="Target host")
     method: str = Field(..., description="HTTP method")
@@ -42,7 +42,7 @@ class RequestLog(BaseModel):
 
     id: Optional[str] = None
     request_id: str = Field(..., description="Original request ID")
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     origin: str
     host: str
     method: str
