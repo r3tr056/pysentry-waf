@@ -50,6 +50,27 @@ The PySentry WAF project is a personal project and is licensed under the [MIT Li
 
 - **PySentry WAF** makes use of various open-source libraries and tools, including Flask, scikit-learn, and Scapy. We acknowledge and thank the developers of these projects for their valuable contributions.
 
+## Production Readiness
+
+⚠️ **Important**: This project is currently in an **educational/experimental** state and **NOT production-ready**.
+
+For a comprehensive analysis of what's required to make this project production-ready, including identified gaps, security issues, and a complete implementation roadmap, please see:
+
+- 📋 **[Production Readiness Assessment](PRODUCTION_READINESS_ASSESSMENT.md)** - Complete analysis of gaps and implementation plan
+- ✅ **[Implementation Checklist](IMPLEMENTATION_CHECKLIST.md)** - Detailed checklist for tracking progress
+- 🚀 **[Quick Reference Guide](QUICK_REFERENCE.md)** - Quick overview of critical issues and fixes
+
+### Key Issues to Address
+
+**Critical Security Issues:**
+- Hard-coded credentials in source code
+- No authentication/authorization
+- Missing input validation
+- No TLS/SSL configuration
+- Zero test coverage
+
+**Estimated Effort:** 12-16 weeks with a team of 2-3 developers to achieve production readiness.
+
 ## Disclaimer
 
 **PySentry WAF** is a personal project developed for learning and experimentation purposes. It is not intended to be a fully production-grade solution. Users deploying this tool should thoroughly test and customize it according to their environment and security requirements before considering any production use.
